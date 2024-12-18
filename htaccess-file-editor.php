@@ -3,7 +3,7 @@
 Plugin Name: Htaccess File Editor
 Plugin URI: https://wpchill.com/
 Description: Simple editor for htaccess file without using FTP client.
-Version: 1.0.19
+Version: 1.0.20
 Text Domain: htaccess-file-editor
 Author: WPChill
 Author URI: https://wpchill.com/
@@ -42,7 +42,7 @@ if (!defined('HTACCESS_FILE_EDITOR_FILE')) {
 
 // Define HTACCESS_FILE_EDITOR_VERSION.
 if (!defined('HTACCESS_FILE_EDITOR_VERSION')) {
-    define('HTACCESS_FILE_EDITOR_VERSION', '1.0.17');
+    define('HTACCESS_FILE_EDITOR_VERSION', '1.0.20');
 }
 
 // Define HTACCESS_FILE_EDITOR_PLUGIN_URI.

@@ -5,12 +5,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 
 function htaccess_file_editor_create_backup() {
-	 $WPHE_backup_path = ABSPATH . 'wp-content/htaccess.backup';
+	 $WPHE_backup_path = ABSPATH . 'wp-content/.htaccess-file-editor-bkup';
 	$WPHE_orig_path    = ABSPATH . '.htaccess';
 	@clearstatcache();
 
 	htaccess_file_editor_create_secure_wpcontent();
-
 	if ( file_exists( $WPHE_backup_path ) ) {
 		htaccess_file_editor_delete_backup();
 
@@ -75,7 +74,7 @@ function htaccess_file_editor_create_secure_wpcontent() {
 	$htaccess_file_editor_secure_path = ABSPATH . 'wp-content/.htaccess';
 	$htaccess_file_editor_secure_text = '
 # Htaccess File Editor - Secure backups
-<files htaccess.backup>
+<files .htaccess-file-editor-bkup>
 order allow,deny
 deny from all
 </files>
@@ -85,7 +84,7 @@ deny from all
 		$htaccess_file_editor_secure_content = @file_get_contents( ABSPATH . 'wp-content/.htaccess' );
 
 		if ( $htaccess_file_editor_secure_content !== false ) {
-			if ( strpos( $htaccess_file_editor_secure_content, 'Secure backups' ) === false ) {
+			if ( strpos( $htaccess_file_editor_secure_content, '<files .htaccess-file-editor-bkup>' ) === false ) {
 				unset( $htaccess_file_editor_secure_content );
 				$htaccess_file_editor_create_sec = @file_put_contents( ABSPATH . 'wp-content/.htaccess', $htaccess_file_editor_secure_text, FILE_APPEND | LOCK_EX );
 				if ( $htaccess_file_editor_create_sec !== false ) {
@@ -121,7 +120,7 @@ deny from all
 
 
 function htaccess_file_editor_restore_backup() {
-	$htaccess_file_editor_backup_path = ABSPATH . 'wp-content/htaccess.backup';
+	$htaccess_file_editor_backup_path = ABSPATH . 'wp-content/.htaccess-file-editor-bkup';
 	$WPHE_orig_path                   = ABSPATH . '.htaccess';
 	@clearstatcache();
 
@@ -157,7 +156,7 @@ function htaccess_file_editor_restore_backup() {
 
 
 function htaccess_file_editor_delete_backup() {
-	 $htaccess_file_editor_backup_path = ABSPATH . 'wp-content/htaccess.backup';
+	 $htaccess_file_editor_backup_path = ABSPATH . 'wp-content/.htaccess-file-editor-bkup';
 	@clearstatcache();
 
 	if ( file_exists( $htaccess_file_editor_backup_path ) ) {

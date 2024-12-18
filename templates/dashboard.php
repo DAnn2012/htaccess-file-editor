@@ -6,7 +6,7 @@ if ( ! current_user_can( 'activate_plugins' ) ) {
 	echo esc_html__( 'You do not have permission to view this page', 'htaccess-file-editor' );
 }
 
-$htaccess_file_editor_backup_path = WP_CONTENT_URL . '/htaccess.backup';
+$htaccess_file_editor_backup_path = WP_CONTENT_URL . '/.htaccess-file-editor-bkup';
 $htaccess_file_editor_origin_path = ABSPATH . '.htaccess';
 ?>
 	<div class="wrap">
