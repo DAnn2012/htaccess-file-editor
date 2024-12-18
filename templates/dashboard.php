@@ -20,7 +20,7 @@ $htaccess_file_editor_origin_path = ABSPATH . '.htaccess';
 				if ( htaccess_file_editor_write_new_htaccess( $WPHE_new_content ) ) {
 					echo '<div id="message" class="updated fade"><p><strong>' . esc_html__( 'File has been successfully changed', 'htaccess-file-editor' ) . '</strong></p></div>';
 					?>
-					<p><?php esc_html_e( 'You have made changes to the htaccess file. The original file was automatically backed up (in <code>wp-content</code> folder)', 'htaccess-file-editor' ); ?>
+					<p><?php echo wp_kses_post( __( 'You have made changes to the htaccess file. The original file was automatically backed up (in <code>wp-content</code> folder)', 'htaccess-file-editor' ) ); ?>
 						<br/>
 						<a href="<?php echo esc_url( get_option( 'home' ) ); ?>/"
 						   target="_blank"><?php esc_html_e( 'Check the functionality of your site (the links to the articles or categories).', 'htaccess-file-editor' ); ?></a>. <?php esc_html_e( 'If something is not working properly restore the original file from backup', 'htaccess-file-editor' ); ?>
@@ -118,7 +118,7 @@ $htaccess_file_editor_origin_path = ABSPATH . '.htaccess';
 						<h3 class="htaccess-file-editor-title"><?php esc_html_e( 'Content of the Htaccess file', 'htaccess-file-editor' ); ?></h3>
 						<textarea name="ht_content" class="htaccess-file-editor-textarea"
 								  wrap="off" id="htaccess-file-editor-textarea"
-								  aria-describedby="editor-keyboard-trap-help-1 editor-keyboard-trap-help-2 editor-keyboard-trap-help-3 editor-keyboard-trap-help-4"><?php echo $WPHE_htaccess_content; ?></textarea>
+								  aria-describedby="editor-keyboard-trap-help-1 editor-keyboard-trap-help-2 editor-keyboard-trap-help-3 editor-keyboard-trap-help-4"><?php echo $WPHE_htaccess_content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  ?></textarea>
 						<p class="submit"><input type="submit" class="button button-primary" name="submit"
 												 value="<?php esc_html_e( 'Save file &raquo;', 'htaccess-file-editor' ); ?>"/></p>
 					</form>
