@@ -41,7 +41,7 @@ class Htaccess_File_Editor_Hooks {
 		}
 		wp_enqueue_style( 'htaccess-file-editor-style', HTACCESS_FILE_EDITOR_PLUGIN_URI . '/assets/css/admin.css', array( 'wp-codemirror' ), HTACCESS_FILE_EDITOR_VERSION );
 
-		wp_enqueue_script( 'htaccess-file-editor-script', HTACCESS_FILE_EDITOR_PLUGIN_URI . '/assets/js/htaccess-file-editor.js', array( 'jquery', 'wp-theme-plugin-editor' ), HTACCESS_FILE_EDITOR_VERSION );
+		wp_enqueue_script( 'htaccess-file-editor-script', HTACCESS_FILE_EDITOR_PLUGIN_URI . '/assets/js/htaccess-file-editor.js', array( 'jquery', 'wp-theme-plugin-editor' ), HTACCESS_FILE_EDITOR_VERSION, true );
 
 		$settings['codeEditor'] = wp_enqueue_code_editor( array( 'type' => 'text/css' ) );
 

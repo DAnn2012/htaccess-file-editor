@@ -5,7 +5,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( ! current_user_can( 'activate_plugins' ) ) {
 	echo esc_html__( 'You do not have permission to view this page', 'htaccess-file-editor' );
 }
-
+global $wp_filesystem;
+require_once ABSPATH . '/wp-admin/includes/file.php';
+WP_Filesystem();
 $htaccess_file_editor_backup_path = WP_CONTENT_URL . '/.htaccess-file-editor-bkup';
 $htaccess_file_editor_origin_path = ABSPATH . '.htaccess';
 ?>
@@ -14,7 +16,7 @@ $htaccess_file_editor_origin_path = ABSPATH . '.htaccess';
 		<?php
 		// ============================ Uložení Htaccess souboru =======================================
 		if ( ! empty( $_POST['submit'] ) and ! empty( $_POST['save_htaccess'] ) and check_admin_referer( 'htaccess_file_editor_save', 'htaccess_file_editor_save' ) ) {
-			$WPHE_new_content = $_POST['ht_content'];
+			$WPHE_new_content = ! empty( $_POST['ht_content'] ) ? $_POST['ht_content'] : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash 
 			htaccess_file_editor_delete_backup();
 			if ( htaccess_file_editor_create_backup() ) {
 				if ( htaccess_file_editor_write_new_htaccess( $WPHE_new_content ) ) {
@@ -23,7 +25,7 @@ $htaccess_file_editor_origin_path = ABSPATH . '.htaccess';
 					<p><?php echo wp_kses_post( __( 'You have made changes to the htaccess file. The original file was automatically backed up (in <code>wp-content</code> folder)', 'htaccess-file-editor' ) ); ?>
 						<br/>
 						<a href="<?php echo esc_url( get_option( 'home' ) ); ?>/"
-						   target="_blank"><?php esc_html_e( 'Check the functionality of your site (the links to the articles or categories).', 'htaccess-file-editor' ); ?></a>. <?php esc_html_e( 'If something is not working properly restore the original file from backup', 'htaccess-file-editor' ); ?>
+							target="_blank"><?php esc_html_e( 'Check the functionality of your site (the links to the articles or categories).', 'htaccess-file-editor' ); ?></a>. <?php esc_html_e( 'If something is not working properly restore the original file from backup', 'htaccess-file-editor' ); ?>
 					</p>
 					<div class="postbox" style="float: left; width: 95%; padding: 15px;">
 						<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=htaccess-file-editor' ) ); ?>">
@@ -31,7 +33,7 @@ $htaccess_file_editor_origin_path = ABSPATH . '.htaccess';
 							<input type="hidden" name="delete_backup" value="delete"/>
 							<p class="submit"><?php esc_attr_e( 'If everything works properly, you can delete the backup file:', 'htaccess-file-editor' ); ?>
 								<input type="submit" class="button button-primary" name="submit"
-									   value="<?php esc_attr_e( 'Remove backup &raquo;', 'htaccess-file-editor' ); ?>"/>&nbsp;<?php echo esc_html__( 'or', 'htaccess-file-editor' ); ?>
+										value="<?php esc_attr_e( 'Remove backup &raquo;', 'htaccess-file-editor' ); ?>"/>&nbsp;<?php echo esc_html__( 'or', 'htaccess-file-editor' ); ?>
 								&nbsp;<a
 										href="<?php echo esc_url( admin_url( 'admin.php?page=htaccess-file-editor-backup' ) ); ?>"><?php esc_html_e( 'restore the original file from backup', 'htaccess-file-editor' ); ?></a>
 							</p>
@@ -79,7 +81,7 @@ $htaccess_file_editor_origin_path = ABSPATH . '.htaccess';
 							href="http://net.tutsplus.com/tutorials/other/the-ultimate-guide-to-htaccess-files/"
 							target="_blank">The Ultimate Guide to .htaccess Files</a>. </p>
 				<p><a href="http://www.google.com/#sclient=psy&q=htaccess+how+to"
-					  target="_blank"><?php esc_html_e( 'use the Google search.', 'htaccess-file-editor' ); ?></a></p>
+						target="_blank"><?php esc_html_e( 'use the Google search.', 'htaccess-file-editor' ); ?></a></p>
 			</div>
 			<?php
 			if ( ! file_exists( $htaccess_file_editor_origin_path ) ) {
@@ -96,8 +98,8 @@ $htaccess_file_editor_origin_path = ABSPATH . '.htaccess';
 					$success = false;
 				}
 				if ( $success == true ) {
-					@chmod( $htaccess_file_editor_origin_path, 0644 );
-					$WPHE_htaccess_content = @file_get_contents( $htaccess_file_editor_origin_path, false, null );
+					$wp_filesystem->chmod( $htaccess_file_editor_origin_path, 0644 );
+					$WPHE_htaccess_content = $wp_filesystem->get_contents( $htaccess_file_editor_origin_path );
 					if ( $WPHE_htaccess_content === false ) {
 						echo '<div class="postbox htaccess-file-editor-box">';
 						echo '<pre class="htaccess-file-editor-red">' . esc_html__( 'Htaccess file cannot read!', 'htaccess-file-editor' ) . '</pre>';
@@ -117,10 +119,10 @@ $htaccess_file_editor_origin_path = ABSPATH . '.htaccess';
 						<?php wp_nonce_field( 'htaccess_file_editor_save', 'htaccess_file_editor_save' ); ?>
 						<h3 class="htaccess-file-editor-title"><?php esc_html_e( 'Content of the Htaccess file', 'htaccess-file-editor' ); ?></h3>
 						<textarea name="ht_content" class="htaccess-file-editor-textarea"
-								  wrap="off" id="htaccess-file-editor-textarea"
-								  aria-describedby="editor-keyboard-trap-help-1 editor-keyboard-trap-help-2 editor-keyboard-trap-help-3 editor-keyboard-trap-help-4"><?php echo $WPHE_htaccess_content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  ?></textarea>
+									wrap="off" id="htaccess-file-editor-textarea"
+									aria-describedby="editor-keyboard-trap-help-1 editor-keyboard-trap-help-2 editor-keyboard-trap-help-3 editor-keyboard-trap-help-4"><?php echo $WPHE_htaccess_content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></textarea>
 						<p class="submit"><input type="submit" class="button button-primary" name="submit"
-												 value="<?php esc_html_e( 'Save file &raquo;', 'htaccess-file-editor' ); ?>"/></p>
+												value="<?php esc_html_e( 'Save file &raquo;', 'htaccess-file-editor' ); ?>"/></p>
 					</form>
 				</div>
 				<?php
@@ -145,4 +147,3 @@ $htaccess_file_editor_origin_path = ABSPATH . '.htaccess';
 <?php
 unset( $htaccess_file_editor_origin_path );
 unset( $htaccess_file_editor_backup_path );
-
