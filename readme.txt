@@ -40,7 +40,7 @@ Try to restore the original backup file. If restoration is not possible with thi
 Please go to our support forums. We’ll gladly help you.
 
 == Changelog ==
-= 1.0.20 - 18/12/2024 =
+= 1.0.20 - 19/12/2024 =
 * Fixed: Security issue regarding htaccess backups in certain situations
 
 = 1.0.19 - 03/10/2024 =
