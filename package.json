@@ -1,6 +1,6 @@
 {
 	"name": "htaccess-file-editor",
-	"version": "1.0.17",
+	"version": "1.0.20",
 	"description": "Simple editor for htaccess file without using FTP client.",
 	"author": "WPChill",
 	"license": "GPL-2.0-or-later",
