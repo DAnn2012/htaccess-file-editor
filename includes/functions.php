@@ -8,13 +8,21 @@ function htaccess_file_editor_create_backup() {
 	global $wp_filesystem;
 	require_once ABSPATH . '/wp-admin/includes/file.php';
 	WP_Filesystem();
-	$WPHE_backup_path = ABSPATH . 'wp-content/.htaccess-file-editor-bkup';
+	$saved_name = get_option( 'htaccess_file_editor_backup_name' );
+	// Check if the backup file is saved in the options
+	if ( $saved_name ) {
+		$file_name = $saved_name;
+	} else {
+		$hash      = sanitize_file_name( substr( wp_generate_password( 10, false ), 0, 5 ) );
+		$file_name = '.htaccess-file-editor-bkup-' . $hash;
+	}
+	$WPHE_backup_path = ABSPATH . 'wp-content/' . $file_name;
 	$WPHE_orig_path   = ABSPATH . '.htaccess';
 	@clearstatcache();
 
-	htaccess_file_editor_create_secure_wpcontent();
+	htaccess_file_editor_create_secure_wpcontent( $file_name );
 	if ( file_exists( $WPHE_backup_path ) ) {
-		htaccess_file_editor_delete_backup();
+		htaccess_file_editor_delete_backup( $file_name );
 
 		if ( file_exists( ABSPATH . '.htaccess' ) ) {
 			$htaccess_content_orig = $wp_filesystem->get_contents( $WPHE_orig_path );
@@ -34,6 +42,7 @@ function htaccess_file_editor_create_backup() {
 				unset( $WPHE_orig_path );
 				unset( $htaccess_content_orig );
 				unset( $WPHE_success );
+				update_option( 'htaccess_file_editor_backup_name', $file_name );
 				return true;
 			}
 			$wp_filesystem->chmod( $WPHE_backup_path, 0644 );
@@ -63,6 +72,7 @@ function htaccess_file_editor_create_backup() {
 			unset( $WPHE_orig_path );
 			unset( $htaccess_content_orig );
 			unset( $WPHE_success );
+			update_option( 'htaccess_file_editor_backup_name', $file_name );
 			return true;
 		}
 		$wp_filesystem->chmod( $WPHE_backup_path, 0644 );
@@ -74,11 +84,14 @@ function htaccess_file_editor_create_backup() {
 }
 
 
-function htaccess_file_editor_create_secure_wpcontent() {
+function htaccess_file_editor_create_secure_wpcontent( $file_name = false ) {
+	if ( ! $file_name ) {
+		return false;
+	}
 	$htaccess_file_editor_secure_path = ABSPATH . 'wp-content/.htaccess';
 	$htaccess_file_editor_secure_text = '
 # Htaccess File Editor - Secure backups
-<files .htaccess-file-editor-bkup>
+<files ' . $file_name . '>
 order allow,deny
 deny from all
 </files>
@@ -90,7 +103,7 @@ deny from all
 		$htaccess_file_editor_secure_content = $wp_filesystem->get_contents( ABSPATH . 'wp-content/.htaccess' );
 
 		if ( $htaccess_file_editor_secure_content !== false ) {
-			if ( strpos( $htaccess_file_editor_secure_content, '<files .htaccess-file-editor-bkup>' ) === false ) {
+			if ( strpos( $htaccess_file_editor_secure_content, '<files ' . $file_name . '>' ) === false ) {
 				unset( $htaccess_file_editor_secure_content );
 				$htaccess_file_editor_create_sec = $wp_filesystem->put_contents( ABSPATH . 'wp-content/.htaccess', $htaccess_file_editor_secure_text );
 				if ( $htaccess_file_editor_create_sec !== false ) {
@@ -124,7 +137,11 @@ deny from all
 
 
 function htaccess_file_editor_restore_backup() {
-	$htaccess_file_editor_backup_path = ABSPATH . 'wp-content/.htaccess-file-editor-bkup';
+	$file_name = get_option( 'htaccess_file_editor_backup_name' );
+	if ( ! $file_name ) {
+		return false;
+	}
+	$htaccess_file_editor_backup_path = ABSPATH . 'wp-content/' . $file_name;
 	$WPHE_orig_path                   = ABSPATH . '.htaccess';
 	@clearstatcache();
 	global $wp_filesystem;
@@ -151,7 +168,7 @@ function htaccess_file_editor_restore_backup() {
 			unset( $htaccess_file_editor_backup_path );
 			return $htaccess_file_editor_htaccess_content_backup;
 		} else {
-			htaccess_file_editor_delete_backup();
+			htaccess_file_editor_delete_backup( $file_name );
 			unset( $htaccess_file_editor_success );
 			unset( $htaccess_file_editor_htaccess_content_backup );
 			unset( $WPHE_orig_path );
@@ -162,8 +179,15 @@ function htaccess_file_editor_restore_backup() {
 }
 
 
-function htaccess_file_editor_delete_backup() {
-	$htaccess_file_editor_backup_path = ABSPATH . 'wp-content/.htaccess-file-editor-bkup';
+function htaccess_file_editor_delete_backup( $file_name = false ) {
+
+	if ( ! $file_name ) {
+		$file_name = get_option( 'htaccess_file_editor_backup_name' );
+		if ( ! $file_name ) {
+			return false;
+		}
+	}
+	$htaccess_file_editor_backup_path = ABSPATH . 'wp-content/' . $file_name;
 	@clearstatcache();
 
 	global $wp_filesystem;
@@ -183,10 +207,12 @@ function htaccess_file_editor_delete_backup() {
 			unset( $htaccess_file_editor_backup_path );
 			return false;
 		} else {
+			delete_option( 'htaccess_file_editor_backup_name' );
 			unset( $htaccess_file_editor_backup_path );
 			return true;
 		}
 	} else {
+		delete_option( 'htaccess_file_editor_backup_name' );
 		unset( $htaccess_file_editor_backup_path );
 		return true;
 	}

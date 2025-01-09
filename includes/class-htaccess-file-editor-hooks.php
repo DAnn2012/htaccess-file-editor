@@ -63,12 +63,16 @@ class Htaccess_File_Editor_Hooks {
 	 */
 	public function migrate_backup_name() {
 		$old_name = 'htaccess.backup';
-		$new_name = '.htaccess-file-editor-bkup';
+		$hash     = sanitize_file_name( substr( wp_generate_password( 10, false ), 0, 5 ) );
+		$new_name = '.htaccess-file-editor-bkup-' . $hash;
 		$path     = WP_CONTENT_DIR;
-		// If the new backup file exists, then we don't need to migrate
-		if ( file_exists( $path . '/' . $new_name ) ) {
+		// Retrieve the saved backup name
+		$saved_name = get_option( 'htaccess_file_editor_backup_name' );
+		// If the backup file is saved in the options and exists, then we don't need to migrate
+		if ( $saved_name && file_exists( $path . '/' . $saved_name ) ) {
 			return;
 		}
+
 		// If the old file doesn't exist, then we don't need to migrate
 		if ( ! file_exists( $path . '/' . $old_name ) ) {
 			return;
@@ -79,6 +83,7 @@ class Htaccess_File_Editor_Hooks {
 		require_once ABSPATH . '/wp-admin/includes/file.php';
 		WP_Filesystem();
 		$wp_filesystem->move( $path . '/' . $old_name, $path . '/' . $new_name );
+		update_option( 'htaccess_file_editor_backup_name', $new_name );
 	}
 }
 

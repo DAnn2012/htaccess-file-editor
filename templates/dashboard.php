@@ -8,7 +8,8 @@ if ( ! current_user_can( 'activate_plugins' ) ) {
 global $wp_filesystem;
 require_once ABSPATH . '/wp-admin/includes/file.php';
 WP_Filesystem();
-$htaccess_file_editor_backup_path = WP_CONTENT_URL . '/.htaccess-file-editor-bkup';
+$file_name = get_option( 'htaccess_file_editor_backup_name' );
+$htaccess_file_editor_backup_path = WP_CONTENT_URL . '/' . $file_name;
 $htaccess_file_editor_origin_path = ABSPATH . '.htaccess';
 ?>
 	<div class="wrap">
