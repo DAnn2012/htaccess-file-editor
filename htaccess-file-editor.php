@@ -8,7 +8,7 @@ Text Domain: htaccess-file-editor
 Author: WPChill
 Author URI: https://wpchill.com/
 Requires at least: 3.0.0
-Tested up to: 6.7
+Tested up to: 6.8
 License: GPLv2 or later
 * Copyright 2024            WPChill             heyyy@wpchill.com
 *

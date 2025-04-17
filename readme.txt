@@ -4,7 +4,7 @@ Author URI: https://wpchill.com/
 Tags: htaccess, htaccess editor, htaccess backup, htaccess restore
 Version: 1.0.20
 Requires at least: 3.0
-Tested up to: 6.7
+Tested up to: 6.8
 Stable tag: 1.0.20
 License: GPLv2 or later
 
