@@ -36,6 +36,10 @@ Sorry, we can’t change the file access privileges set by your server. You’ll
 You probably have a syntax error in the file or on the server you are not allowed any of the settings in your htaccess file.
 Try to restore the original backup file. If restoration is not possible with this plugin, restore the backup file from the folder “wp-content ” manually.
 
+= Where do I report security bugs found in this plugin? =
+
+Please report security bugs found in the source code of the Htaccess File Editor plugin through the [Patchstack Vulnerability Disclosure  Program](https://patchstack.com/database/vdp/9e5fc0b4-a337-4757-92c4-0758f66513b4). The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this plugin."
+
 = How do I get support?
 Please go to our support forums. We’ll gladly help you.
 
