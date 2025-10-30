@@ -2,10 +2,10 @@
 Contributors: WPChill, silkalns
 Author URI: https://wpchill.com/
 Tags: htaccess, htaccess editor, htaccess backup, htaccess restore
-Version: 1.0.20
+Version: 1.0.21
 Requires at least: 3.0
 Tested up to: 6.8
-Stable tag: 1.0.20
+Stable tag: 1.0.21
 License: GPLv2 or later
 
 Simple editor htaccess file without using FTP client.
@@ -44,6 +44,9 @@ Please report security bugs found in the source code of the Htaccess File Editor
 Please go to our support forums. We’ll gladly help you.
 
 == Changelog ==
+= 1.0.21 - 30/10/2025 =
+* Fixed: Use properly echoing functions for strings.
+
 = 1.0.20 - 19/12/2024 =
 * Fixed: Security issue regarding htaccess backups in certain situations
 
