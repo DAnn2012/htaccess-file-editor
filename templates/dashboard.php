@@ -134,7 +134,7 @@ $htaccess_file_editor_origin_path = ABSPATH . '.htaccess';
 					<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=htaccess-file-editor' ) ); ?>">
 						<input type="hidden" name="create_htaccess" value="create"/>
 						<?php wp_nonce_field( 'htaccess_file_editor_create', 'htaccess_file_editor_create' ); ?>
-						<p class="submit"><?php esc_html__( 'Create new <code>.htaccess</code> file?', 'htaccess-file-editor' ); ?> <input
+						<p class="submit"><?php esc_html_e( 'Create new <code>.htaccess</code> file?', 'htaccess-file-editor' ); ?> <input
 									type="submit" class="button button-primary" name="submit"
 									value="<?php esc_attr_e( 'Create &raquo;', 'htaccess-file-editor' ); ?>"/></p>
 					</form>
